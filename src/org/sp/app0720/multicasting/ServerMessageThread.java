@@ -1,4 +1,4 @@
-package org.sp.app0720.unicasting;
+package org.sp.app0720.multicasting;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,17 +29,6 @@ public class ServerMessageThread extends Thread {
 		}
 	}
 	
-	//말하기 
-	public void sendMsg(String msg) {
-		try {
-			buffw.write(msg + "\n");
-			buffw.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-		
-	}
-	
 	@Override
 	public void run() {
 		while(true) {
@@ -51,12 +40,9 @@ public class ServerMessageThread extends Thread {
 				msg = buffr.readLine();
 				area.append(msg + "\n"); // 로그 남기기
 
-				//말하기, 나의 메서드만 호출하지 말고, 나와 동시에 살아가는
-				//다른 쓰레드 인스턴스의 메서드로 호출해주자
-				//for(int i=0;i) {
-				//	쓰레드들의.sendMsg(msg);
-				//}
-				
+				// 말하기
+				buffw.write(msg + "\n");
+				buffw.flush();
 			} catch (IOException e) {
 
 				e.printStackTrace();

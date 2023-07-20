@@ -1,12 +1,15 @@
-package org.sp.app0720.unicasting;
+package org.sp.app0720.multicasting;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,17 +29,14 @@ public class GUIServer extends JFrame {
 
 	Thread thread; // 메인 쓰레드가 대기상태에 빠지지 않도록하기 위한
 					// 별도의 쓰레드..
-	Vector<ServerMessageThread> vec; //자바의 컬렉션프레임웍 중 ,순서 있는 객체를 다루는 List 의 자식
-					//동기화를 지원하므로, 멀티쓰레드에서 안정적..
-	
+
 	public GUIServer() {
 		p_north = new JPanel();
 		t_port = new JTextField("7777", 10);
 		bt = new JButton("서버가동");
 		area = new JTextArea();
 		scroll = new JScrollPane(area);
-		vec = new Vector<ServerMessageThread>();
-		
+
 		// 조립
 		p_north.add(t_port);
 		p_north.add(bt);
@@ -80,10 +80,6 @@ public class GUIServer extends JFrame {
 				
 				ServerMessageThread smt=new ServerMessageThread(socket, area);
 				smt.start();
-				
-				//접속자 명단에 대화용쓰레드 추가하기 
-				vec.add(smt);
-				area.append("현재 접속자 수 "+vec.size()+" 명\n");
 			}
 
 		} catch (IOException e) {
