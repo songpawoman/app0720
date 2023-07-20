@@ -5,8 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -56,7 +58,7 @@ public class ClientMain extends JFrame{
 		add(scroll);
 		add(t_input, BorderLayout.SOUTH);
 		
-		setSize(300,400);
+		setBounds(100,200,300,400);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -97,10 +99,18 @@ public class ClientMain extends JFrame{
 			OutputStream os=socket.getOutputStream();
 			OutputStreamWriter writer=new OutputStreamWriter(os);
 			BufferedWriter buffw=new BufferedWriter(writer);
+			BufferedReader buffr=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
 			String msg=t_input.getText();//사용자가 입력한 값
 			buffw.write(msg+"\n");
 			buffw.flush();
+			
+			t_input.setText("");//입력초기화 
+			
+			//서버로부터 받은 메시지를 로그로 남기기
+			msg=buffr.readLine();
+			area.append(msg+"\n");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
